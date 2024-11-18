@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "2-d_Workspace_Simulation_Game",
   "private": true,
   "scripts": {
     "build": "turbo build",
