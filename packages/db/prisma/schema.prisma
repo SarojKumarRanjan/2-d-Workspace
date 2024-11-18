@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String?  @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  avatarId  String?
+  role      Role
+  spaces     Space[]
+  avatar    Avatar?  @relation(fields: [avatarId], references: [id])
+}
+
+model Space {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  width     Int
+  height    Int?
+  thumbnail String?
+  createrId   String
+  creater     User     @relation(fields: [createrId], references: [id])
+  elements    SpaceElements[]
+}
+
+model SpaceElements {
+  id        String   @id @default(cuid())
+  elementId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  spaceId   String
+  x         Int
+  y         Int
+  element   Elements @relation(fields: [elementId], references: [id])
+  space     Space    @relation(fields: [spaceId], references: [id])
+}
+
+model Elements {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  thumbnail String?
+  width  Int
+  height Int
+  spaces SpaceElements[]
+  maps   MapElements[]
+}
+
+model Map {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  width     Int
+  height    Int?
+  elements  MapElements[]
+}
+
+model MapElements {
+  id        String   @id @default(cuid())
+  mapId     String
+  elementId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  x         Int?
+  y         Int?
+  map       Map      @relation(fields: [mapId], references: [id])
+  element   Elements? @relation(fields: [elementId], references: [id])
+}
+
+model Avatar {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  thumbnail String?
+  users     User[]
+}
+
+enum Role {
+  admin
+  user
+}
