@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { adminMiddleware } from "../middlewares/admin.middleware";
 
 import {
     createElement,
@@ -9,8 +10,8 @@ import {
 
 export const adminRouter = Router();
 
-adminRouter.post("/create-element", createElement);
-adminRouter.put("/update-element/:elementId", updateElement);
-adminRouter.post("/create-avatar", createAvatar);
-adminRouter.post("/create-map", createMap);
+adminRouter.post("/create-element", adminMiddleware,createElement);
+adminRouter.put("/update-element/:elementId",adminMiddleware, updateElement);
+adminRouter.post("/create-avatar",adminMiddleware, createAvatar);
+adminRouter.post("/create-map",adminMiddleware, createMap);
 
