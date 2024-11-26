@@ -52,14 +52,14 @@ model SpaceElements {
 
 model Elements {
   id String @id @default(cuid())
-
+  static    Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   thumbnail String?
-  width  Int
-  height Int
-  spaces SpaceElements[]
-  maps   MapElements[]
+  width     Int
+  height    Int
+  spaces    SpaceElements[]
+  maps      MapElements[]
 }
 
 model Map {
@@ -67,6 +67,7 @@ model Map {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  thumbnail String
   width     Int
   height    Int?
   elements  MapElements[]
