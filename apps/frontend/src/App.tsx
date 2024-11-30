@@ -1,23 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import GameRoom from './pages/GameRoom';
-import NotFound from './pages/NotFound';
-import Navbar from './components/Shared/Navbar';
-
+import { Outlet } from "react-router-dom"
+import Navbar from "./components/Shared/Navbar"
+import Sidebar from "./components/Shared/Sidebar"
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/game-room" element={<GameRoom />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <div className="bg-gray-800 text-white  p-4">
+        <Navbar />
+        </div>
+        <Sidebar />
+        <Outlet />
+      
+    </>
   )
 }

@@ -9,27 +9,27 @@ const authApi = axios.create({
   },
 });
 
-export const login = async (email: string, password: string) => {
-  const response = await authApi.post(`${API_URL}/auth/login`, { email, password });
+export const login = async (username: string, password: string) => {
+  const response = await authApi.post(`${API_URL}/user/signin`, { username, password });
   return response.data;
 };
 
-export const register = async (email: string, password: string, role: string) => {
-  const response = await axios.post(`${API_URL}/auth/register`, { email, password,role });
+export const register = async (username: string, password: string, role: string) => {
+  const response = await axios.post(`${API_URL}/user/signup`, { username, password,role });
   return response.data;
 };
 
 export const updateMetadata = async (metadata: any) => {
-  const response = await authApi.put(`${API_URL}/auth/update-metadata`, metadata);
+  const response = await authApi.put(`${API_URL}/user/update-metadata`, metadata);
   return response.data;
 };
 
 export const getAvailableAvatars = async () => {
-  const response = await authApi.get(`${API_URL}/auth/avatars`);
+  const response = await authApi.get(`${API_URL}/user/avatars`);
   return response.data;
 };
 
 export const getUsersMetadata = async () => {
-  const response = await authApi.get(`${API_URL}/auth/metadata`);
+  const response = await authApi.get(`${API_URL}/user/metadata`);
   return response.data;
 };

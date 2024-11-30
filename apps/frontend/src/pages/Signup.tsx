@@ -1,8 +1,10 @@
-
+import { SignupForm } from "../components";
 
 function Signup() {
   return (
-    <div>Signup</div>
+    <div>
+        <SignupForm />
+    </div>
   )
 }
 
