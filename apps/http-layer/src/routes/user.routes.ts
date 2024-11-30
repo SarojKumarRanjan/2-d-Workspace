@@ -14,5 +14,5 @@ export const userRouter = Router();
 userRouter.post("/signin", login);
 userRouter.post("/signup", register);
 userRouter.put("/update-metadata",verifyUser, updateMetadata);
-userRouter.get("/avatars", getAvailableAvatars);
-userRouter.get("/metadata", getUsersMetadata);
+userRouter.get("/avatars",verifyUser, getAvailableAvatars);
+userRouter.get("/metadata", verifyUser, getUsersMetadata);
