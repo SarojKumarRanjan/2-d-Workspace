@@ -37,7 +37,10 @@ const login = asyncHandler(async (req: Request, res: Response) => {
     process.env.JWT_SECRET!
   );
 
-  resultFormatter.success(res, { token }, "User logged in successfully", 200);
+  //console.log(user);
+  
+
+  resultFormatter.success(res, {...user,password:undefined, token}, "User logged in successfully", 200);
 });
 
 const register = asyncHandler(async (req: Request, res: Response) => {
