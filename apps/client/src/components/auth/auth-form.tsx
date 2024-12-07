@@ -37,7 +37,7 @@ export function AuthForm({ type }: AuthFormProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg shadow-lg">
+      <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg border shadow-lg">
         <h2 className="text-2xl font-bold text-center text-foreground">
           {type === "signin" ? "Sign In" : "Sign Up"}
         </h2>

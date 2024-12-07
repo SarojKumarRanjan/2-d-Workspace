@@ -1,19 +1,19 @@
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
-import { Hero } from "@/components/Hero";
-import { AuthForm } from "@/components/auth/auth-form";
-
+import { Navbar } from "@/components/Header/Navbar";
+import Footer from "@/components/Header/Footer";
+import { Outlet } from "react-router-dom";
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hero />} />
-        <Route path="/signin" element={<AuthForm type="signin" />} />
-        <Route path="/signup" element={<AuthForm type="signup" />} />
-      </Routes>
-      <Toaster />
-    </Router>
+    <div className=" bg-background text-foreground">
+      <div className="bg-background text-foreground mb-14">
+      <Navbar />
+      </div>
+      <Outlet />
+
+      <Toaster position="top-right" richColors />
+      <Footer />
+      
+    </div>
   );
 }
 

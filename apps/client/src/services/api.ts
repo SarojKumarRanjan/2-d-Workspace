@@ -1,9 +1,25 @@
 import axios from 'axios';
 
+// Create axios instance with default config
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:3000/api', // Update this with your actual API base URL
   withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Handle unauthorized access
+      window.location.href = '/signin';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const authService = {
   login: (username: string, password: string) =>
@@ -22,4 +38,20 @@ export const spaceService = {
   addElement: (elementData: any) => api.post('/space/add-element', elementData),
   deleteElement: (elementId: string) =>
     api.delete(`/space/delete-element/${elementId}`),
+};
+
+export const adminService = {
+  createMap: (formData: FormData) => 
+    api.post('/admin/create-map', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  getMaps: () => api.get('/admin/maps'),
+  createElement: (elementData: any) =>
+    api.post('/admin/create-element', elementData),
+  updateElement: (elementId: string, elementData: any) =>
+    api.put(`/admin/update-element/${elementId}`, elementData),
+  createAvatar: (formData: FormData) =>
+    api.post('/admin/create-avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
 };
