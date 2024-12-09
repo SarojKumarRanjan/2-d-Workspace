@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useWebSocket } from "@/hooks/use-websocket";
+//import { useWebSocket } from "@/hooks/use-websocket";
 import { useStore } from "@/store/useStore"; 
+import { Link } from "react-router-dom";
+import { authService } from "@/services/api"
+
+import { useAuth } from "@/store/useAuth";
 
 interface AuthFormProps {
   type: "signin" | "signup";
@@ -12,23 +16,39 @@ export function AuthForm({ type }: AuthFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { connect } = useWebSocket();
+ // const { connect } = useWebSocket();
   const setCurrentUser = useStore((state) => state.setCurrentUser);
-
+  const setUser = useAuth((state) => state.setUser);
+  if(!setUser){
+    navigate("/signin");
+  }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/user/${type}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      let data;
+      if(type === "signin"){
+       const response = await authService.login  (username, password);
+        data = response.data;
 
-      if (!response.ok) throw new Error("Authentication failed");
+        //console.log(response);
+      }
+      else{
+        const response = await authService.register(username, password, "admin");
+        if(response.data.success === true) {
+          const loginResponse = await authService.login(username, password);
+          data = loginResponse.data;
+        }
+        
+        else{
+          data = response.data;
+        }
 
-      const user = await response.json();
-      setCurrentUser(user);
-      connect();
+      }
+      if (data.success === false) throw new Error("Authentication failed");
+
+      setUser(data?.data);
+      setCurrentUser(data?.data);
+      
       navigate("/spaces");
     } catch (error) {
       console.error("Auth error:", error);
@@ -76,16 +96,16 @@ export function AuthForm({ type }: AuthFormProps) {
           {type === "signin" ? (
             <>
               Don't have an account?{" "}
-              <a href="/signup" className="text-primary hover:underline">
+              <Link to="/signup" className="text-primary hover:underline">
                 Sign Up
-              </a>
+              </Link>
             </>
           ) : (
             <>
               Already have an account?{" "}
-              <a href="/signin" className="text-primary hover:underline">
+              <Link to="/signin" className="text-primary hover:underline">
                 Sign In
-              </a>
+              </Link>
             </>
           )}
         </p>

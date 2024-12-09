@@ -1,20 +1,23 @@
 import axios from 'axios';
 
-// Create axios instance with default config
+
+const token = localStorage.getItem('token');
+
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Update this with your actual API base URL
-  withCredentials: true,
+  baseURL: 'http://localhost:3000/api/v1', 
+  
   headers: {
     'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
   },
 });
 
-// Add response interceptor for error handling
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
+      
       window.location.href = '/signin';
     }
     return Promise.reject(error);
@@ -22,10 +25,28 @@ api.interceptors.response.use(
 );
 
 export const authService = {
-  login: (username: string, password: string) =>
-    api.post('/user/signin', { username, password }),
-  register: (username: string, password: string) =>
-    api.post('/user/signup', { username, password }),
+  login: (username: string, password: string) =>{
+
+  try {
+    const response =  api.post('/user/signin', { username, password })
+    return response;
+  } catch (error) {
+    throw error; 
+  }
+
+
+
+
+},
+  register: (username: string, password: string,role:string) =>
+    {
+      try {
+        const response = api.post('/user/signup', { username, password, role });
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   getMetadata: () => api.get('/user/metadata'),
   getAvatars: () => api.get('/user/avatars'),
 };

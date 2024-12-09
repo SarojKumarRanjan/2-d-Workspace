@@ -1,6 +1,10 @@
 export interface User {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  token: string;
   username: string;
+  role: string;
   avatarId: string;
 }
 

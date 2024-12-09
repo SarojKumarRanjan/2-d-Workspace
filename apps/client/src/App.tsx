@@ -4,11 +4,13 @@ import Footer from "@/components/Header/Footer";
 import { Outlet } from "react-router-dom";
 function App() {
   return (
-    <div className=" bg-background text-foreground">
-      <div className="bg-background text-foreground mb-14">
+    <div className=" bg-background ">
+      <div className="bg-background mb-14">
       <Navbar />
       </div>
+      <div className="bg-background">
       <Outlet />
+      </div>
 
       <Toaster position="top-right" richColors />
       <Footer />
