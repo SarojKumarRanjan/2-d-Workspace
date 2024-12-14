@@ -8,6 +8,7 @@ import {
 } from "../types";
 import { resultFormatter } from "../utils/resultFormatter";
 import client from "@repo/db/client";
+import { uploadToCloudinary,deleteOnCloudinary } from "../utils/fileUpload";
 
 const createElement = asyncHandler(async (req: Request, res: Response) => {
   const parsedData = CreateElementSchema.safeParse(req.body);
@@ -17,9 +18,26 @@ const createElement = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
+  const thumbnailLocalPath = req.file?.path;
+
+  if(!thumbnailLocalPath){
+    resultFormatter.throw("thumbnail not found", 400);
+    return;
+  }
+
+  const thumbnailCloudinary = await uploadToCloudinary(thumbnailLocalPath);
+
+  if(!thumbnailCloudinary){
+    resultFormatter.throw("thumbnail not uploaded", 400);
+    return;
+  }
+
+
+
+
   const elementCreated = await client.elements.create({
     data: {
-      thumbnail: parsedData.data.thumbnail,
+      thumbnail: thumbnailCloudinary.url,
       static: parsedData.data.static,
       height: parsedData.data.height,
       width: parsedData.data.width,
@@ -46,8 +64,43 @@ const updateElement = asyncHandler(async (req: Request, res: Response) => {
 
   const parsedData = UpdateElementSchema.safeParse(req.body);
 
+
   if (!parsedData.success) {
     resultFormatter.throw(parsedData.error.message, 400);
+    return;
+  }
+
+  const thumbnailLocalPath = req.file?.path;
+
+  if(!thumbnailLocalPath){
+    resultFormatter.throw("thumbnail not found", 400);
+    return;
+  }
+
+  const thumbnailCloudinary = await uploadToCloudinary(thumbnailLocalPath);
+
+  if(!thumbnailCloudinary){
+    resultFormatter.throw("thumbnail not uploaded", 400);
+    return;
+  }
+
+  const element = await client.elements.findUnique({
+    where: {
+      id: elementId,
+    },
+  });
+
+
+
+  if(!element){
+    resultFormatter.throw("element not found", 400);
+    return;
+  }
+
+  const deletedThumbnail = await deleteOnCloudinary(element.thumbnail!);
+
+  if(!deletedThumbnail){
+    resultFormatter.throw("thumbnail not deleted", 400);
     return;
   }
 
@@ -56,7 +109,7 @@ const updateElement = asyncHandler(async (req: Request, res: Response) => {
       id: elementId,
     },
     data: {
-      thumbnail: parsedData.data.thumbnail,
+      thumbnail: thumbnailCloudinary.url,
     },
   });
 
@@ -83,9 +136,23 @@ const createAvatar = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
+  const thumbnailLocalPath = req.file?.path;
+
+  if(!thumbnailLocalPath){
+    resultFormatter.throw("thumbnail not found", 400);
+    return;
+  }
+
+  const thumbnailCloudinary = await uploadToCloudinary(thumbnailLocalPath);
+
+  if(!thumbnailCloudinary){
+    resultFormatter.throw("thumbnail not uploaded", 400);
+    return;
+  }
+
   const avatarCreated = await client.avatar.create({
     data: {
-      thumbnail: parsedData.data.thumbnail,
+      thumbnail: thumbnailCloudinary.url,
       name: parsedData.data.name,
     },
   });
@@ -113,10 +180,24 @@ const createMap = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
+  const thumbnailLocalPath = req.file?.path;
+
+  if(!thumbnailLocalPath){
+    resultFormatter.throw("thumbnail not found", 400);
+    return;
+  }
+
+  const thumbnailCloudinary = await uploadToCloudinary(thumbnailLocalPath);
+
+  if(!thumbnailCloudinary){
+    resultFormatter.throw("thumbnail not uploaded", 400);
+    return;
+  }
+
   const mapCreated = await client.map.create({
     data: {
       name: parsedData.data.name,
-      thumbnail: parsedData.data.thumbnail,
+      thumbnail: thumbnailCloudinary.url,
       height: parseInt(parsedData.data.dimensions.split("x")[0]),
       width: parseInt(parsedData.data.dimensions.split("x")[1]),
       elements: {
