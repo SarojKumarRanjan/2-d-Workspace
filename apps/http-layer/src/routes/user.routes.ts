@@ -6,7 +6,8 @@ import {
     register,
     updateMetadata,
     getAvailableAvatars,
-    getUsersMetadata
+    getUsersMetadata,
+    getAllMaps
 } from "../controllers/user.controller"
 
 export const userRouter = Router();
@@ -16,3 +17,4 @@ userRouter.post("/signup", register);
 userRouter.put("/update-metadata",verifyUser, updateMetadata);
 userRouter.get("/avatars",verifyUser, getAvailableAvatars);
 userRouter.get("/metadata", verifyUser, getUsersMetadata);
+userRouter.get("/maps", verifyUser, getAllMaps);

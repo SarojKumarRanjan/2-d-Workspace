@@ -55,7 +55,7 @@ export const CreateMapSchema = z.object({
        y: z.preprocess((val) => parseFloat(val as string), z.number()), 
      })
    ),
- });
+ }).optional();
 
 declare global {
   namespace Express {

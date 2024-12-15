@@ -173,7 +173,15 @@ const createAvatar = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const createMap = asyncHandler(async (req: Request, res: Response) => {
-  const parsedData = CreateMapSchema.safeParse(req.body);
+
+  const bodyData = req.body;
+
+  
+  const arraydata = JSON.parse(bodyData.defaultElements);
+  bodyData.defaultElements = arraydata;
+  
+
+  const parsedData = CreateMapSchema.safeParse(bodyData);
 
   if (!parsedData.success) {
     resultFormatter.throw(parsedData.error.message, 400);
@@ -191,6 +199,11 @@ const createMap = asyncHandler(async (req: Request, res: Response) => {
 
   if(!thumbnailCloudinary){
     resultFormatter.throw("thumbnail not uploaded", 400);
+    return;
+  }
+
+  if(!parsedData?.data){
+    resultFormatter.throw("default elements not found", 400);
     return;
   }
 

@@ -142,10 +142,24 @@ const getUsersMetadata = asyncHandler(async (req: Request, res: Response) => {
   );
 });
 
+const getAllMaps = asyncHandler(async (req: Request, res: Response) => {
+  const maps = await client.map.findMany(
+    {include: {
+      elements: {
+        include: {
+          element: true, 
+        },
+      },
+    }}
+    );
+  resultFormatter.success(res, { maps }, "Maps fetched successfully", 200);
+});
+
 export {
   login,
   register,
   updateMetadata,
   getAvailableAvatars,
   getUsersMetadata,
+  getAllMaps,
 };
