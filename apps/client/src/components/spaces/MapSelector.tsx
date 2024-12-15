@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { CreateMapDialog } from "@/components/spaces/CreateMapDialog";
 import { useMaps } from "@/hooks/use-maps";
+import { ScrollArea } from "../ui/scrollArea";
 
 interface MapSelectorProps {
-  onSelect: (mapId: string) => void;
-  selected: string;
+  onSelect: (mapId: string,dimensions:string) => void;
+  selected: {
+    mapId: string;
+    dimensions: string;
+  };
 }
 
 export function MapSelector({ onSelect, selected }: MapSelectorProps) {
@@ -49,21 +53,24 @@ export function MapSelector({ onSelect, selected }: MapSelectorProps) {
           Create Map
         </Button>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <ScrollArea className="h-72 w-full ">
+      <div className="grid grid-cols-4 gap-4">
+        
         {maps.map((map) => (
           <div
             key={map.id}
-            className={`cursor-pointer rounded-lg border p-2 ${
-              selected === map.id
+            className={`w-[290px] h-[250px]  cursor-pointer rounded-lg border p-2 mx-2 ${
+              selected.mapId === map.id
                 ? "border-primary bg-primary/10"
                 : "hover:border-primary/50"
             }`}
-            onClick={() => onSelect(map.id)}
+            onClick={() => onSelect(map.id,`${map.width}x${map.height}`)}
           >
             <div className="aspect-video rounded bg-muted mb-2">
-              {map.previewUrl ? (
+              {map.thumbnail ? (
                 <img
-                  src={map.previewUrl}
+                 
+                  src={map.thumbnail}
                   alt={map.name}
                   className="w-full h-full object-cover rounded"
                 />
@@ -76,7 +83,11 @@ export function MapSelector({ onSelect, selected }: MapSelectorProps) {
             <p className="text-sm font-medium truncate">{map.name}</p>
           </div>
         ))}
+
+
+        
       </div>
+      </ScrollArea>
       <CreateMapDialog 
         open={createMapOpen} 
         onOpenChange={setCreateMapOpen} 

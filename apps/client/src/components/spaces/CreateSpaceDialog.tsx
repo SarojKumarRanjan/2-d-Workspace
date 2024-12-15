@@ -22,7 +22,7 @@ interface CreateSpaceDialogProps {
 export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [selectedMap, setSelectedMap] = useState("");
+  const [selectedMap, setSelectedMap] = useState({ mapId: "", dimensions: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCreate = async () => {
@@ -33,11 +33,12 @@ export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps
 
     setIsLoading(true);
     try {
-      const response = await spaceService.createSpace(name, selectedMap);
+      const response = await spaceService.createSpace(name, selectedMap.mapId, selectedMap.dimensions);
       toast.success("Space created successfully!");
       onOpenChange(false);
       navigate(`/space/${response.data.id}`);
     } catch (error) {
+      console.error(error);
       toast.error("Failed to create space");
     } finally {
       setIsLoading(false);
@@ -46,7 +47,7 @@ export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[80%] h-[85vh] max-w-none max-h-none">
         <DialogHeader>
           <DialogTitle>Create New Space</DialogTitle>
           <DialogDescription>
@@ -63,7 +64,7 @@ export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps
               placeholder="Enter space name"
             />
           </div>
-          <MapSelector onSelect={setSelectedMap} selected={selectedMap} />
+          <MapSelector onSelect={(mapId, dimensions) => setSelectedMap({ mapId, dimensions })} selected={selectedMap} />
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"

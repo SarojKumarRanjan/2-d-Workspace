@@ -1,11 +1,40 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { adminService } from '@/services/api';
+import { authService } from '@/services/api';
+
+
+
+
+type element = {
+id:string;
+static:boolean;
+thumbnail:string;
+width:number;
+height:number;
+createdAt:string;
+updatedAt:string;
+}
+
+type elements = {
+  id:string;
+  mapId:string;
+  elementId:string;
+  createdAt:string;
+  updatedAt:string;
+  x:number;
+  y:number;
+  element:element;
+}
 
 interface Map {
   id: string;
   name: string;
-  previewUrl?: string;
+  thumbnail?: string;
+  width: number;
+  height: number;
+elements: elements[];
+createdAt: string;
+updatedAt: string;
 }
 
 export function useMaps() {
@@ -16,9 +45,10 @@ export function useMaps() {
   useEffect(() => {
     const fetchMaps = async () => {
       try {
-        const response = await adminService.getMaps();
-        if (response.data && Array.isArray(response.data)) {
-          setMaps(response.data);
+        const response = await authService.getMaps();
+        console.log(response)
+        if (response.data && Array.isArray(response.data?.data?.maps)) {
+          setMaps(response.data?.data?.maps);
         } else {
           throw new Error('Invalid response format');
         }
@@ -26,7 +56,7 @@ export function useMaps() {
         const message = error instanceof Error ? error.message : 'Failed to fetch maps';
         setError(message);
         toast.error(message);
-        setMaps([]); // Set empty array on error
+        setMaps([]); 
       } finally {
         setIsLoading(false);
       }

@@ -38,6 +38,7 @@ export function CreateMapDialog({ open, onOpenChange }: CreateMapDialogProps) {
       toast.success("Map created successfully!");
       onOpenChange(false);
     } catch (error) {
+      console.error(error);
       toast.error("Failed to create map");
     } finally {
       setIsLoading(false);
@@ -46,7 +47,7 @@ export function CreateMapDialog({ open, onOpenChange }: CreateMapDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[80%] max-w-none">
         <DialogHeader>
           <DialogTitle>Create New Map</DialogTitle>
           <DialogDescription>

@@ -29,6 +29,7 @@ export function AuthForm({ type }: AuthFormProps) {
       if(type === "signin"){
        const response = await authService.login  (username, password);
         data = response.data;
+        
 
         //console.log(response);
       }
@@ -49,7 +50,7 @@ export function AuthForm({ type }: AuthFormProps) {
       setUser(data?.data);
       setCurrentUser(data?.data);
       
-      navigate("/spaces");
+      navigate("/admin");
     } catch (error) {
       console.error("Auth error:", error);
     }
