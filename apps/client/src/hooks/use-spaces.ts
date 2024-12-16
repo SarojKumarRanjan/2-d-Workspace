@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { Space } from '@/types';
+import { Myspace } from '@/types';
 import { spaceService } from '@/services/api';
 
 export function useSpaces() {
-  const [spaces, setSpaces] = useState<Space[]>([]);
+  const [spaces, setSpaces] = useState<Myspace[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,8 +12,10 @@ export function useSpaces() {
     const fetchSpaces = async () => {
       try {
         const response = await spaceService.getMySpaces();
-        if (response.data && Array.isArray(response.data)) {
-          setSpaces(response.data);
+        console.log(response.data.data);
+        
+        if (response.data ) {
+          setSpaces(response.data?.data);
         } else {
           throw new Error('Invalid response format');
         }
@@ -21,7 +23,7 @@ export function useSpaces() {
         const message = error instanceof Error ? error.message : 'Failed to fetch spaces';
         setError(message);
         toast.error(message);
-        setSpaces([]); // Set empty array on error
+        setSpaces([]); 
       } finally {
         setIsLoading(false);
       }

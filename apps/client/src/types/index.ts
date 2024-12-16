@@ -8,6 +8,14 @@ export interface User {
   avatarId: string;
 }
 
+export interface Myspace {
+  id: string;
+  name: string;
+  thumbnail: string;
+  dimensions: string;
+}
+
+
 export interface Space {
   id: string;
   name: string;

@@ -25,6 +25,9 @@ export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps
   const [selectedMap, setSelectedMap] = useState({ mapId: "", dimensions: "" });
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(selectedMap);
+  
+
   const handleCreate = async () => {
     if (!name || !selectedMap) {
       toast.error("Please fill in all fields");
@@ -36,7 +39,9 @@ export function CreateSpaceDialog({ open, onOpenChange }: CreateSpaceDialogProps
       const response = await spaceService.createSpace(name, selectedMap.mapId, selectedMap.dimensions);
       toast.success("Space created successfully!");
       onOpenChange(false);
-      navigate(`/space/${response.data.id}`);
+      navigate(`/space/${response.data?.data?.spaceId}`);
+     // console.log(response);
+      
     } catch (error) {
       console.error(error);
       toast.error("Failed to create space");
