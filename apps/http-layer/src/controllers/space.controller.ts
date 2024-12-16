@@ -19,6 +19,7 @@ const createSpace = asyncHandler(async (req: Request, res: Response) => {
         createrId: req.userId as string,
         height: parseInt(parsedData.data.dimensions.split("x")[0]),
         width: parseInt(parsedData.data.dimensions.split("x")[1]),
+        
       },
     });
 
@@ -41,6 +42,7 @@ const createSpace = asyncHandler(async (req: Request, res: Response) => {
       elements: true,
       height: true,
       width: true,
+      thumbnail: true,
     },
   });
 
@@ -55,7 +57,8 @@ const createSpace = asyncHandler(async (req: Request, res: Response) => {
         name: parsedData.data.name,
         width: map.width,
         height: map.height,
-        createrId: req.userId!,
+        createrId: req.userId as string,
+        thumbnail: map.thumbnail,
       },
     });
 
