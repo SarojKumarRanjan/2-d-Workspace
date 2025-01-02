@@ -7,6 +7,7 @@ import { Hero } from './components/Hero.tsx';
 import { SpacesPage } from './components/spaces/SpacesPage.tsx';
 import { AuthForm } from './components/auth/auth-form.tsx';
 import  AdminPage  from './components/admin/AdminPage.tsx';
+import SpaceMainPage  from './components/spacePage/spacePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -33,8 +34,15 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <AdminPage />,
       },
+     
     ],
   },
+  
+    {
+      path: "/space/:spaceId",
+      element: <SpaceMainPage />,
+    }
+  
 ]); 
 
 
