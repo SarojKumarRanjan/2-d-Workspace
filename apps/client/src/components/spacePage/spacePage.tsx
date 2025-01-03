@@ -15,7 +15,7 @@ useEffect(() => {
     if(gameRef.current){
         const config: Phaser.Types.Core.GameConfig = {
             type: Phaser.AUTO,
-            parent: 'phaser-container',
+            parent: gameRef.current,
             backgroundColor: '#93cbee',
             pixelArt: true, 
             scale: {
