@@ -2,6 +2,7 @@
 import Phaser from 'phaser'
 import { useRef,useEffect } from 'react'
 import EnhancedSkyScene from './scenes/Background';
+import {MainScene} from './scenes/Game';
 
 export default function SpaceMainPage() {
     const gameRef = useRef<HTMLDivElement| null>(null);
@@ -31,7 +32,7 @@ useEffect(() => {
               },
             },
             autoFocus: true,
-            scene: [ EnhancedSkyScene],
+            scene: [MainScene],
           }
           
           const phaserGame = new Phaser.Game(config)
